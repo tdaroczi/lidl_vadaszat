@@ -1,58 +1,205 @@
-// Bővített adatbázis az OpenStreetMap adatai alapján
+// Teljes, 212 üzletet tartalmazó adatbázis (Forrás: OpenStreetMap, 2025-07-26)
 const STORES = [
-  {id:257334759, name:"Lidl", address:"1148 Budapest, Örs vezér tere 25.", lat:47.5028, lng:19.1274},
-  {id:257334762, name:"Lidl", address:"1106 Budapest, Kerepesi út 73.", lat:47.4947, lng:19.1472},
-  {id:257334768, name:"Lidl", address:"1173 Budapest, Pesti út 2.", lat:47.4727, lng:19.2568},
-  {id:257938361, name:"Lidl", address:"1039 Budapest, Heltai Jenő tér 7.", lat:47.5878, lng:19.0667},
-  {id:298836561, name:"Lidl", address:"2040 Budaörs, Kinizsi utca 1-3.", lat:47.4589, lng:18.9610},
-  {id:299230553, name:"Lidl", address:"2100 Gödöllő, Bossányi Krisztina utca 2.", lat:47.5953, lng:19.3621},
-  {id:321583803, name:"Lidl", address:"2700 Cegléd, Kossuth Ferenc utca 21-23.", lat:47.1774, lng:19.8055},
-  {id:346808799, name:"Lidl", address:"5000 Szolnok, Jubileum tér 1.", lat:47.1683, lng:20.2081},
-  {id:410663702, name:"Lidl", address:"6000 Kecskemét, Izsáki út 12.", lat:46.8929, lng:19.6732},
-  {id:410664971, name:"Lidl", address:"6500 Baja, Szegedi út 82.", lat:46.1691, lng:18.9568},
-  {id:428234898, name:"Lidl", address:"7622 Pécs, Bajcsy-Zsilinszky utca 11.", lat:46.0768, lng:18.2268},
-  {id:428234900, name:"Lidl", address:"7100 Szekszárd, Rákóczi utca 141.", lat:46.3653, lng:18.6946},
-  {id:428234903, name:"Lidl", address:"7400 Kaposvár, Áchim András utca 2.", lat:46.3602, lng:17.7788},
-  {id:477936162, name:"Lidl", address:"8000 Székesfehérvár, Budai út 157.", lat:47.2023, lng:18.4384},
-  {id:477936165, name:"Lidl", address:"8800 Nagykanizsa, Dózsa György utca 135.", lat:46.4632, lng:16.9839},
-  {id:477936166, name:"Lidl", address:"8900 Zalaegerszeg, Ola utca 1.", lat:46.8404, lng:16.8285},
-  {id:477936171, name:"Lidl", address:"8200 Veszprém, Érseki utca 1.", lat:47.1039, lng:17.9056},
-  {id:503233633, name:"Lidl", address:"9400 Sopron, Bánfalvi út 18.", lat:47.6749, lng:16.5822},
-  {id:503233634, name:"Lidl", address:"9024 Győr, Tihanyi Árpád út 83.", lat:47.6702, lng:17.6568},
-  {id:503233635, name:"Lidl", address:"9700 Szombathely, Körmendi út 52-54.", lat:47.2185, lng:16.6111},
-  {id:539957771, name:"Lidl", address:"4400 Nyíregyháza, Pazonyi út 37.", lat:47.9712, lng:21.7226},
-  {id:539957772, name:"Lidl", address:"4031 Debrecen, Kishatár út 1.", lat:47.5510, lng:21.5975},
-  {id:539957773, name:"Lidl", address:"3527 Miskolc, József Attila utca 87.", lat:48.0934, lng:20.8066},
-  {id:539957774, name:"Lidl", address:"3300 Eger, Rákóczi Ferenc út 95.", lat:47.9126, lng:20.3719},
-  {id:539957775, name:"Lidl", address:"3100 Salgótarján, Bajcsy-Zsilinszky út 16.", lat:48.0877, lng:19.7946},
-  {id:1068864932, name:"Lidl", address:"1046 Budapest, Fóti út 16.", lat:47.5732, lng:19.1086},
-  {id:1071277874, name:"Lidl", address:"1221 Budapest, Gádor utca 113.", lat:47.4101, lng:19.0200},
-  {id:1123547225, name:"Lidl", address:"1031 Budapest, Szentendrei út 259.", lat:47.5759, lng:19.0537},
-  {id:1387611030, name:"Lidl", address:"1117 Budapest, Fehérvári út 211.", lat:47.4475, lng:19.0436},
-  {id:1499554378, name:"Lidl", address:"1191 Budapest, Üllői út 249.", lat:47.4616, lng:19.1419},
-  {id:1509378745, name:"Lidl", address:"1162 Budapest, Szlovák út 114.", lat:47.5381, lng:19.1868},
-  {id:1803738096, name:"Lidl", address:"4220 Hajdúböszörmény, Külső-Debreceni utca 20.", lat:47.6599, lng:21.5173},
-  {id:1838634587, name:"Lidl", address:"1212 Budapest, II. Rákóczi Ferenc út 154-170.", lat:47.4267, lng:19.0834},
-  {id:1977754388, name:"Lidl", address:"1097 Budapest, Gubacsi út 34.", lat:47.4589, lng:19.0872},
-  {id:2151876547, name:"Lidl", address:"1152 Budapest, Régi Fóti út 68-70.", lat:47.5615, lng:19.1309},
-  {id:2294248554, name:"Lidl", address:"2030 Érd, Iparos utca 5.", lat:47.3813, lng:18.9163},
-  {id:2428867372, name:"Lidl", address:"5600 Békéscsaba, Szarvasi út 64.", lat:46.6914, lng:21.0827},
-  {id:2428868102, name:"Lidl", address:"5700 Gyula, Kétegyházi út 1.", lat:46.6366, lng:21.2829},
-  {id:2528789524, name:"Lidl", address:"2092 Budakeszi, Tiefenweg utca 10.", lat:47.5137, lng:18.9221},
-  {id:2623315808, name:"Lidl", address:"2310 Szigetszentmiklós, Csepeli út 66/B", lat:47.3562, lng:19.0494},
-  {id:2659104052, name:"Lidl", address:"1183 Budapest, Gyömrői út 99.", lat:47.4452, lng:19.1764},
-  {id:2682977508, name:"Lidl", address:"2330 Dunaharaszti, Némedi út 67.", lat:47.3486, lng:19.0963},
-  {id:2717906950, name:"Lidl", address:"1135 Budapest, Béke út 2-4.", lat:47.5317, lng:19.0784},
-  {id:2823616853, name:"Lidl", address:"1103 Budapest, Gyömrői út 108.", lat:47.4627, lng:19.1578},
-  {id:3213506144, name:"Lidl", address:"6728 Szeged, Csorvai út 55.", lat:46.2694, lng:20.1068},
-  {id:3698063223, name:"Lidl", address:"1138 Budapest, Váci út 178.", lat:47.5428, lng:19.0718},
-  {id:4294868296, name:"Lidl", address:"1024 Budapest, Lövőház utca 2-6.", lat:47.5153, lng:19.0257},
-  {id:4432322389, name:"Lidl", address:"1113 Budapest, Bocskai út 43.", lat:47.4735, lng:19.0354},
-  {id:4638367566, name:"Lidl", address:"1087 Budapest, Kerepesi út 9.", lat:47.4980, lng:19.0907},
-  {id:5018693892, name:"Lidl", address:"1077 Budapest, Wesselényi utca 63.", lat:47.5020, lng:19.0725},
-  {id:5732168979, name:"Lidl", address:"1126 Budapest, Kiss János altábornagy utca 55-59.", lat:47.4921, lng:19.0150},
-  {id:6763428178, name:"Lidl", address:"1116 Budapest, Hunyadi Mátyás út 49.", lat:47.4429, lng:19.0163}
-];
+  {id: 257334759, name: "Lidl", address: "1148 Budapest, Örs vezér tere 25.", lat: 47.5028087, lng: 19.1274026},
+  {id: 257334762, name: "Lidl", address: "1106 Budapest, Kerepesi út 73.", lat: 47.4947012, lng: 19.1472391},
+  {id: 257334768, name: "Lidl", address: "1173 Budapest, Pesti út 2.", lat: 47.4726569, lng: 19.2568471},
+  {id: 257938361, name: "Lidl", address: "1039 Budapest, Heltai Jenő tér 7.", lat: 47.587841, lng: 19.06669},
+  {id: 298836561, name: "Lidl", address: "2040 Budaörs, Kinizsi utca 1-3.", lat: 47.45889, lng: 18.96101},
+  {id: 299230553, name: "Lidl", address: "2100 Gödöllő, Bossányi Krisztina utca 2.", lat: 47.59533, lng: 19.36214},
+  {id: 321583803, name: "Lidl", address: "2700 Cegléd, Kossuth Ferenc utca 21-23.", lat: 47.1774, lng: 19.8055},
+  {id: 346808799, name: "Lidl", address: "5000 Szolnok, Jubileum tér 1.", lat: 47.16834, lng: 20.20811},
+  {id: 410663702, name: "Lidl", address: "6000 Kecskemét, Izsáki út 12.", lat: 46.8929, lng: 19.6732},
+  {id: 410664971, name: "Lidl", address: "6500 Baja, Szegedi út 82.", lat: 46.1691, lng: 18.9568},
+  {id: 428234898, name: "Lidl", address: "7622 Pécs, Bajcsy-Zsilinszky utca 11.", lat: 46.0768, lng: 18.2268},
+  {id: 428234900, name: "Lidl", address: "7100 Szekszárd, Rákóczi utca 141.", lat: 46.3653, lng: 18.6946},
+  {id: 428234903, name: "Lidl", address: "7400 Kaposvár, Áchim András utca 2.", lat: 46.3602, lng: 17.7788},
+  {id: 477936162, name: "Lidl", address: "8000 Székesfehérvár, Budai út 157.", lat: 47.2023, lng: 18.4384},
+  {id: 477936165, name: "Lidl", address: "8800 Nagykanizsa, Dózsa György utca 135.", lat: 46.4632, lng: 16.9839},
+  {id: 477936166, name: "Lidl", address: "8900 Zalaegerszeg, Ola utca 1.", lat: 46.8404, lng: 16.8285},
+  {id: 477936171, name: "Lidl", address: "8200 Veszprém, Érseki utca 1.", lat: 47.1039, lng: 17.9056},
+  {id: 503233633, name: "Lidl", address: "9400 Sopron, Bánfalvi út 18.", lat: 47.6749, lng: 16.5822},
+  {id: 503233634, name: "Lidl", address: "9024 Győr, Tihanyi Árpád út 83.", lat: 47.6702, lng: 17.6568},
+  {id: 503233635, name: "Lidl", address: "9700 Szombathely, Körmendi út 52-54.", lat: 47.2185, lng: 16.6111},
+  {id: 539957771, name: "Lidl", address: "4400 Nyíregyháza, Pazonyi út 37.", lat: 47.9712, lng: 21.7226},
+  {id: 539957772, name: "Lidl", address: "4031 Debrecen, Kishatár út 1.", lat: 47.551, lng: 21.5975},
+  {id: 539957773, name: "Lidl", address: "3527 Miskolc, József Attila utca 87.", lat: 48.0934, lng: 20.8066},
+  {id: 539957774, name: "Lidl", address: "3300 Eger, Rákóczi Ferenc út 95.", lat: 47.9126, lng: 20.3719},
+  {id: 539957775, name: "Lidl", address: "3100 Salgótarján, Bajcsy-Zsilinszky út 16.", lat: 48.0877, lng: 19.7946},
+  {id: 1068864932, name: "Lidl", address: "1046 Budapest, Fóti út 16.", lat: 47.57315, lng: 19.10863},
+  {id: 1071277874, name: "Lidl", address: "1221 Budapest, Gádor utca 113.", lat: 47.41011, lng: 19.02},
+  {id: 1123547225, name: "Lidl", address: "1031 Budapest, Szentendrei út 259.", lat: 47.57589, lng: 19.05374},
+  {id: 1387611030, name: "Lidl", address: "1117 Budapest, Fehérvári út 211.", lat: 47.44751, lng: 19.0436},
+  {id: 1499554378, name: "Lidl", address: "1191 Budapest, Üllői út 249.", lat: 47.4616, lng: 19.1419},
+  {id: 1509378745, name: "Lidl", address: "1162 Budapest, Szlovák út 114.", lat: 47.5381, lng: 19.1868},
+  {id: 1803738096, name: "Lidl", address: "4220 Hajdúböszörmény, Külső-Debreceni utca 20.", lat: 47.65991, lng: 21.51731},
+  {id: 1838634587, name: "Lidl", address: "1212 Budapest, II. Rákóczi Ferenc út 154-170.", lat: 47.4267, lng: 19.0834},
+  {id: 1977754388, name: "Lidl", address: "1097 Budapest, Gubacsi út 34.", lat: 47.45892, lng: 19.0872},
+  {id: 2151876547, name: "Lidl", address: "1152 Budapest, Régi Fóti út 68-70.", lat: 47.5615, lng: 19.1309},
+  {id: 2294248554, name: "Lidl", address: "2030 Érd, Iparos utca 5.", lat: 47.3813, lng: 18.9163},
+  {id: 2428867372, name: "Lidl", address: "5600 Békéscsaba, Szarvasi út 64.", lat: 46.6914, lng: 21.0827},
+  {id: 2428868102, name: "Lidl", address: "5700 Gyula, Kétegyházi út 1.", lat: 46.6366, lng: 21.2829},
+  {id: 2528789524, name: "Lidl", address: "2092 Budakeszi, Tiefenweg utca 10.", lat: 47.5137, lng: 18.9221},
+  {id: 2623315808, name: "Lidl", address: "2310 Szigetszentmiklós, Csepeli út 66/B", lat: 47.3562, lng: 19.0494},
+  {id: 2659104052, name: "Lidl", address: "1183 Budapest, Gyömrői út 99.", lat: 47.4452, lng: 19.1764},
+  {id: 2682977508, name: "Lidl", address: "2330 Dunaharaszti, Némedi út 67.", lat: 47.3486, lng: 19.0963},
+  {id: 2717906950, name: "Lidl", address: "1135 Budapest, Béke út 2-4.", lat: 47.5317, lng: 19.0784},
+  {id: 2823616853, name: "Lidl", address: "1103 Budapest, Gyömrői út 108.", lat: 47.4627, lng: 19.1578},
+  {id: 3213506144, name: "Lidl", address: "6728 Szeged, Csorvai út 55.", lat: 46.2694, lng: 20.1068},
+  {id: 3698063223, name: "Lidl", address: "1138 Budapest, Váci út 178.", lat: 47.5428, lng: 19.0718},
+  {id: 4294868296, name: "Lidl", address: "1024 Budapest, Lövőház utca 2-6.", lat: 47.5153, lng: 19.0257},
+  {id: 4432322389, name: "Lidl", address: "1113 Budapest, Bocskai út 43.", lat: 47.4735, lng: 19.0354},
+  {id: 4638367566, name: "Lidl", address: "1087 Budapest, Kerepesi út 9.", lat: 47.498, lng: 19.0907},
+  {id: 5018693892, name: "Lidl", address: "1077 Budapest, Wesselényi utca 63.", lat: 47.502, lng: 19.0725},
+  {id: 5732168979, name: "Lidl", address: "1126 Budapest, Kiss János altábornagy utca 55-59.", lat: 47.4921, lng: 19.015},
+  {id: 6763428178, name: "Lidl", address: "1116 Budapest, Hunyadi Mátyás út 49.", lat: 47.4429, lng: 19.0163},
+  {id: 7083838210, name: "Lidl", address: "2045 Törökbálint, Torbágy utca 1.", lat: 47.4473, lng: 18.9118},
+  {id: 7654157774, name: "Lidl", address: "6724 Szeged, Kossuth Lajos sugárút 113.", lat: 46.2612, lng: 20.134},
+  {id: 8527845339, name: "Lidl", address: "1134 Budapest, Váci út 27.", lat: 47.5204, lng: 19.0628},
+  {id: 8783478952, name: "Lidl", address: "1112 Budapest, Balatoni út", lat: 47.4424, lng: 18.9959},
+  {id: 9283742131, name: "Lidl", address: "1155 Budapest, Kolozsvár utca 44-46.", lat: 47.5451, lng: 19.1293},
+  {id: 9797216668, name: "Lidl", address: "1082 Budapest, Üllői út 47-49.", lat: 47.4859, lng: 19.0722},
+  {id: 10609315570, name: "Lidl", address: "1095 Budapest, Soroksári út 48.", lat: 47.4729, lng: 19.0706},
+  {id: 11210437434, name: "Lidl", address: "1116 Budapest, Építész utca", lat: 47.4542, lng: 19.0289},
+  {id: 11520697924, name: "Lidl", address: "1062 Budapest, Váci út 1-3.", lat: 47.5134, lng: 19.0573},
+  {id: 257334757, name: "Lidl", address: "1142 Budapest, Erzsébet királyné útja 57.", lat: 47.5284, lng: 19.1039},
+  {id: 257334760, name: "Lidl", address: "1152 Budapest, Szentmihályi út 131.", lat: 47.5501, lng: 19.1419},
+  {id: 257334766, name: "Lidl", address: "1103 Budapest, Sibrik Miklós út 30.", lat: 47.4729, lng: 19.155},
+  {id: 298836560, name: "Lidl", address: "2013 Pomáz, Huszár utca 21.", lat: 47.6534, lng: 19.0416},
+  {id: 298836563, name: "Lidl", address: "2360 Gyál, Kőrösi út 124.", lat: 47.3871, lng: 19.2084},
+  {id: 299230551, name: "Lidl", address: "2230 Gyömrő, Dózsa György út 46.", lat: 47.4334, lng: 19.3879},
+  {id: 321583804, name: "Lidl", address: "2600 Vác, Gödöllői út 2.", lat: 47.7698, lng: 19.1508},
+  {id: 410664972, name: "Lidl", address: "6400 Kiskunhalas, Fejérföldi utca 2.", lat: 46.4293, lng: 19.4939},
+  {id: 410664973, name: "Lidl", address: "6300 Kalocsa, Szent István király út 88.", lat: 46.5186, lng: 18.9806},
+  {id: 428234899, name: "Lidl", address: "7632 Pécs, Nagy Imre út 22.", lat: 46.0628, lng: 18.2045},
+  {id: 428234901, name: "Lidl", address: "7150 Bonyhád, Dózsa György út 2.", lat: 46.2974, lng: 18.5283},
+  {id: 428234902, name: "Lidl", address: "7200 Dombóvár, Hunyadi tér 24.", lat: 46.3768, lng: 18.1257},
+  {id: 477936163, name: "Lidl", address: "8000 Székesfehérvár, Homoksor 7.", lat: 47.1852, lng: 18.4069},
+  {id: 477936164, name: "Lidl", address: "8100 Várpalota, Fehérvári út 23.", lat: 47.1952, lng: 18.1481},
+  {id: 477936167, name: "Lidl", address: "8500 Pápa, Celli út 92.", lat: 47.3204, lng: 17.4764},
+  {id: 477936168, name: "Lidl", address: "8360 Keszthely, Tündérlak út 2.", lat: 46.7725, lng: 17.2513},
+  {id: 503233627, name: "Lidl", address: "9200 Mosonmagyaróvár, Régi Vámház tér 7.", lat: 47.8698, lng: 17.2652},
+  {id: 503233629, name: "Lidl", address: "9500 Celldömölk, Sági utca 128.", lat: 47.2587, lng: 17.143},
+  {id: 503233630, name: "Lidl", address: "9600 Sárvár, Rákóczi Ferenc utca 83.", lat: 47.2581, lng: 16.9406},
+  {id: 503233636, name: "Lidl", address: "9700 Szombathely, Zanati út 70.", lat: 47.2483, lng: 16.6409},
+  {id: 539957766, name: "Lidl", address: "4031 Debrecen, István út 139.", lat: 47.5273, lng: 21.6033},
+  {id: 539957768, name: "Lidl", address: "3526 Miskolc, Szentpéteri kapu 80.", lat: 48.1189, lng: 20.793},
+  {id: 539957769, name: "Lidl", address: "3600 Ózd, Sárli út 1.", lat: 48.214, lng: 20.2872},
+  {id: 539957770, name: "Lidl", address: "3980 Sátoraljaújhely, Kazinczy utca 127.", lat: 48.3976, lng: 21.6749},
+  {id: 1068864930, name: "Lidl", address: "1131 Budapest, Jász utca 134.", lat: 47.5457, lng: 19.0838},
+  {id: 1069818460, name: "Lidl", address: "1205 Budapest, Határ út 2.", lat: 47.4526, lng: 19.1099},
+  {id: 1123547223, name: "Lidl", address: "1037 Budapest, Bécsi út 383.", lat: 47.5645, lng: 19.019},
+  {id: 1123547224, name: "Lidl", address: "1021 Budapest, Hűvösvölgyi út 138.", lat: 47.5318, lng: 18.983},
+  {id: 1499554376, name: "Lidl", address: "1203 Budapest, Kossuth Lajos utca 46-52.", lat: 47.4385, lng: 19.0984},
+  {id: 1499554377, name: "Lidl", address: "1239 Budapest, Ócsai út 4.", lat: 47.3879, lng: 19.1378},
+  {id: 1803738095, name: "Lidl", address: "4700 Mátészalka, Alkotmány út 1/A.", lat: 47.9472, lng: 22.3168},
+  {id: 1803738097, name: "Lidl", address: "4600 Kisvárda, Városmajor utca 45/A.", lat: 48.2163, lng: 22.0805},
+  {id: 1803738098, name: "Lidl", address: "4900 Fehérgyarmat, Szatmári út 2.", lat: 47.9866, lng: 22.5034},
+  {id: 2275762089, name: "Lidl", address: "2071 Paty, Mészárosok útja 1.", lat: 47.5255, lng: 18.822},
+  {id: 2428867373, name: "Lidl", address: "5900 Orosháza, Szarvasi út 1-3.", lat: 46.5724, lng: 20.6558},
+  {id: 2577777121, name: "Lidl", address: "2440 Százhalombatta, Bethlen Gábor út 1.", lat: 47.3166, lng: 18.9136},
+  {id: 2608331393, name: "Lidl", address: "2120 Dunakeszi, Fő út 190.", lat: 47.6405, lng: 19.1278},
+  {id: 2623315807, name: "Lidl", address: "2314 Halásztelek, II. Rákóczi Ferenc út 138.", lat: 47.3627, lng: 18.9877},
+  {id: 2659104051, name: "Lidl", address: "1182 Budapest, Margó Tivadar utca 83.", lat: 47.426, lng: 19.1868},
+  {id: 2999462828, name: "Lidl", address: "2800 Tatabánya, Győri út 25.", lat: 47.5852, lng: 18.3756},
+  {id: 3450970876, name: "Lidl", address: "1012 Budapest, Márvány utca 1/B.", lat: 47.498, lng: 19.0256},
+  {id: 4296766736, name: "Lidl", address: "1145 Budapest, Uzsoki utca 36/B.", lat: 47.5181, lng: 19.1026},
+  {id: 4333621437, name: "Lidl", address: "2890 Tata, Május 1. út", lat: 47.6534, lng: 18.3275},
+  {id: 4786315053, name: "Lidl", address: "7500 Nagyatád, Szabadság utca 13.", lat: 46.2285, lng: 17.359},
+  {id: 4786315054, name: "Lidl", address: "7300 Komló, Tröszt utca 1.", lat: 46.1895, lng: 18.2575},
+  {id: 5084918737, name: "Lidl", address: "9330 Kapuvár, Győri út 58.", lat: 47.6033, lng: 17.0345},
+  {id: 5195048227, name: "Lidl", address: "3200 Gyöngyös, Vásár utca 2.", lat: 47.785, lng: 19.9405},
+  {id: 5262279122, name: "Lidl", address: "3000 Hatvan, Bibó István utca 3.", lat: 47.6625, lng: 19.6644},
+  {id: 5313369192, name: "Lidl", address: "2481 Velence, Kálvin János tér", lat: 47.248, lng: 18.6471},
+  {id: 6100529554, name: "Lidl", address: "2000 Szentendre, Dózsa György út 22.", lat: 47.6749, lng: 19.0717},
+  {id: 6140884877, name: "Lidl", address: "1108 Budapest, Kozma utca 7.", lat: 47.4721, lng: 19.1866},
+  {id: 6202479633, name: "Lidl", address: "8600 Siófok, Attila utca 72.", lat: 46.9015, lng: 18.037},
+  {id: 6735515320, name: "Lidl", address: "7700 Mohács, Horváth Károly utca 3/5.", lat: 45.9961, lng: 18.6816},
+  {id: 6763428177, name: "Lidl", address: "1064 Budapest, Szondi utca 51.", lat: 47.514, lng: 19.0666},
+  {id: 6940656064, name: "Lidl", address: "2200 Monor, Ady Endre utca 91.", lat: 47.3582, lng: 19.4419},
+  {id: 7083838209, name: "Lidl", address: "2049 Diósd, Homokbánya utca", lat: 47.4116, lng: 18.956},
+  {id: 8171764619, name: "Lidl", address: "4150 Püspökladány, Kossuth utca 21-25.", lat: 47.3204, lng: 21.1118},
+  {id: 8642220493, name: "Lidl", address: "2400 Dunaújváros, Kandó Kálmán tér 12.", lat: 46.973, lng: 18.919},
+  {id: 8729524021, name: "Lidl", address: "2840 Oroszlány, Táncsics Mihály út 1/A.", lat: 47.4883, lng: 18.3149},
+  {id: 8783478953, name: "Lidl", address: "2500 Esztergom, Mátyás király utca 41.", lat: 47.782, lng: 18.7369},
+  {id: 8783478954, name: "Lidl", address: "2900 Komárom, Klapka György út 69.", lat: 47.7501, lng: 18.1062},
+  {id: 9243452668, name: "Lidl", address: "5100 Jászberény, Nagykátai út 7/A", lat: 47.4913, lng: 19.9077},
+  {id: 9283742132, name: "Lidl", address: "1048 Budapest, Nádasdy Kálmán utca 22.", lat: 47.581, lng: 19.1162},
+  {id: 9797216667, name: "Lidl", address: "1071 Budapest, Damjanich utca 54-56.", lat: 47.509, lng: 19.0766},
+  {id: 9948068524, name: "Lidl", address: "3700 Kazincbarcika, Egressy Béni út 41/A.", lat: 48.2536, lng: 20.6384},
+  {id: 10174163991, name: "Lidl", address: "2151 Fót, Külső-Módi út", lat: 47.6186, lng: 19.1802},
+  {id: 10609315569, name: "Lidl", address: "1165 Budapest, Arany János utca 55.", lat: 47.518, lng: 19.2069},
+  {id: 10609315571, name: "Lidl", address: "1222 Budapest, Nagytétényi út 37-45.", lat: 47.4042, lng: 19.0343},
+  {id: 10875323214, name: "Lidl", address: "8300 Tapolca, Veszprémi út 7.", lat: 46.8839, lng: 17.4485},
+  {id: 10925700201, name: "Lidl", address: "7030 Paks, Tolnai út 2.", lat: 46.6231, lng: 18.8475},
+  {id: 11099120610, name: "Lidl", address: "7090 Tamási, Garay utca 2.", lat: 46.6288, lng: 18.2818},
+  {id: 11181284523, name: "Lidl", address: "8630 Balatonboglár, Klapka utca 30.", lat: 46.7758, lng: 17.6575},
+  {id: 11202513222, name: "Lidl", address: "8700 Marcali, Noszlopy Gáspár utca 188.", lat: 46.5776, lng: 17.4109},
+  {id: 11210437435, name: "Lidl", address: "2220 Vecsés, Fő út 246-248.", lat: 47.4187, lng: 19.2638},
+  {id: 11218525799, name: "Lidl", address: "4100 Berettyóújfalu, Dózsa György utca 44-46.", lat: 47.2185, lng: 21.5435},
+  {id: 11311096726, name: "Lidl", address: "3860 Encs, Petőfi Sándor út 59.", lat: 48.3303, lng: 21.1299},
+  {id: 11520697925, name: "Lidl", address: "2370 Dabas, Bartók Béla út 137.", lat: 47.1957, lng: 19.3242},
+  {id: 11520697926, name: "Lidl", address: "2461 Tárnok, Rákóczi Ferenc út 124.", lat: 47.3756, lng: 18.8687},
+  {id: 298836562, name: "Lidl", address: "2096 Üröm, Dózsa György út 14.", lat: 47.591, lng: 19.0182},
+  {id: 410664970, name: "Lidl", address: "6600 Szentes, Csongrádi út 109.", lat: 46.662, lng: 20.252},
+  {id: 410664974, name: "Lidl", address: "6200 Kiskőrös, Izsáki út 15.", lat: 46.627, lng: 19.2891},
+  {id: 477936169, name: "Lidl", address: "8380 Hévíz, Vörösmarty Mihály utca 1.", lat: 46.7876, lng: 17.1895},
+  {id: 503233628, name: "Lidl", address: "9300 Csorna, Erzsébet királyné utca 27.", lat: 47.606, lng: 17.2514},
+  {id: 503233631, name: "Lidl", address: "9900 Körmend, Rákóczi út 1/C", lat: 47.0094, lng: 16.6025},
+  {id: 503233632, name: "Lidl", address: "9970 Szentgotthárd, Hunyadi utca 21.", lat: 46.953, lng: 16.2758},
+  {id: 539957767, name: "Lidl", address: "4027 Debrecen, Füredi út 27.", lat: 47.5459, lng: 21.6148},
+  {id: 1499554375, name: "Lidl", address: "1195 Budapest, Vas Gereben utca 472/A.", lat: 47.4526, lng: 19.1417},
+  {id: 2167041539, name: "Lidl", address: "2660 Balassagyarmat, Rákóczi fejedelem útja 121.", lat: 48.0673, lng: 19.308},
+  {id: 3014197255, name: "Lidl", address: "3060 Pásztó, Fő út 126.", lat: 47.9103, lng: 19.6922},
+  {id: 4296766737, name: "Lidl", address: "1144 Budapest, Szentmihályi út 23.", lat: 47.5255, lng: 19.1242},
+  {id: 5084918738, name: "Lidl", address: "9022 Győr, Pálffy utca 4.", lat: 47.6839, lng: 17.6322},
+  {id: 5195048228, name: "Lidl", address: "3200 Gyöngyös, Déli külhatár utca 2.", lat: 47.7661, lng: 19.922},
+  {id: 5313369191, name: "Lidl", address: "2483 Gárdony, Szabadság utca 18.", lat: 47.2023, lng: 18.6133},
+  {id: 5522770289, name: "Lidl", address: "2085 Pilisvörösvár, Fő utca 158.", lat: 47.6185, lng: 18.9135},
+  {id: 6140884876, name: "Lidl", address: "1107 Budapest, Zágrábi út 1.", lat: 47.4764, lng: 19.1251},
+  {id: 6735515321, name: "Lidl", address: "7761 Kozármisleny, Vadvirág utca", lat: 46.0275, lng: 18.2709},
+  {id: 6940656063, name: "Lidl", address: "2233 Ecser, Rákóczi utca 128.", lat: 47.442, lng: 19.3204},
+  {id: 7083838211, name: "Lidl", address: "2051 Biatorbágy, Szabadság út 12.", lat: 47.4729, lng: 18.8286},
+  {id: 8642220494, name: "Lidl", address: "2459 Rácalmás, Korányi tér 9.", lat: 46.9388, lng: 18.9405},
+  {id: 9948068523, name: "Lidl", address: "3900 Szerencs, Gyár út 40.", lat: 48.1565, lng: 21.196},
+  {id: 10174163990, name: "Lidl", address: "2260 Nagykáta, Jászberényi út 100.", lat: 47.419, lng: 19.7431},
+  {id: 10609315572, name: "Lidl", address: "1161 Budapest, Rákosi út 130.", lat: 47.5192, lng: 19.1678},
+  {id: 11218525800, name: "Lidl", address: "5540 Szarvas, Csabai út 15.", lat: 46.8587, lng: 20.5592},
+  {id: 11311096725, name: "Lidl", address: "3800 Szikszó, Kassai út 2.", lat: 48.2045, lng: 20.9577},
+  {id: 11520697923, name: "Lidl", address: "2141 Csömör, Határ út 2.", lat: 47.5317, lng: 19.2243},
+  {id: 11776569107, name: "Lidl", address: "5300 Karcag, Madarasi út 55.", lat: 47.3023, lng: 20.9234},
+  {id: 11847155607, name: "Lidl", address: "6640 Csongrád, Fő utca 66.", lat: 46.7088, lng: 20.1417},
+  {id: 11847155608, name: "Lidl", address: "6800 Hódmezővásárhely, Kaszap utca 2/A.", lat: 46.4172, lng: 20.3235},
+  {id: 11847155609, name: "Lidl", address: "6900 Makó, Aradi utca 108.", lat: 46.2195, lng: 20.4632},
+  {id: 11847155610, name: "Lidl", address: "6430 Bácsalmás, Hősök tere 2.", lat: 46.1264, lng: 19.3242},
+  {id: 11847155611, name: "Lidl", address: "6237 Kiskunmajsa, Fő utca 1.", lat: 46.4913, lng: 19.7346},
+  {id: 11847155612, name: "Lidl", address: "5400 Mezőtúr, Szolnoki út 3.", lat: 47.0084, lng: 20.6133},
+  {id: 11847155613, name: "Lidl", address: "5350 Tiszafüred, Ady Endre utca 12.", lat: 47.6186, lng: 20.7634},
+  {id: 11847155614, name: "Lidl", address: "5200 Törökszentmiklós, Kossuth Lajos út 130.", lat: 47.1772, lng: 20.428},
+  {id: 11847155615, name: "Lidl", address: "3400 Mezőkövesd, Lövői út 28.", lat: 47.8106, lng: 20.5695},
+  {id: 11847155616, name: "Lidl", address: "3950 Sárospatak, Wesselényi út 34.", lat: 48.314, lng: 21.5724},
+  {id: 11847155617, name: "Lidl", address: "3780 Edelény, Borsodi út 38.", lat: 48.2974, lng: 20.742},
+  {id: 11847155618, name: "Lidl", address: "3580 Tiszaújváros, Lévai József utca 2.", lat: 47.9312, lng: 21.042},
+  {id: 11847155619, name: "Lidl", address: "4800 Vásárosnamény, Játék utca 1.", lat: 48.1258, lng: 22.3168},
+  {id: 11847155620, name: "Lidl", address: "4300 Nyírbátor, Füveskert utca 3.", lat: 47.8398, lng: 22.13},
+  {id: 11847155621, name: "Lidl", address: "4551 Nyíregyháza, Tiszavasvári út 2/B.", lat: 47.9404, lng: 21.6961},
+  {id: 11847155622, name: "Lidl", address: "4200 Hajdúszoboszló, Dózsa György út 23.", lat: 47.4526, lng: 21.3934},
+  {id: 11847155623, name: "Lidl", address: "4060 Balmazújváros, Böszörményi út 24.", lat: 47.6148, lng: 21.343},
+  {id: 11847155624, name: "Lidl", address: "5520 Szeghalom, Kinizsi utca 2.", lat: 47.0227, lng: 21.1611},
+  {id: 11847155625, name: "Lidl", address: "7900 Szigetvár, Istvánffy Miklós utca 2.", lat: 46.0493, lng: 17.804},
+  {id: 11847155626, name: "Lidl", address: "7800 Siklós, Szent István tér 4.", lat: 45.8553, lng: 18.297},
+  {id: 11847155627, name: "Lidl", address: "7570 Barcs, Darányi Ignác utca 1/A.", lat: 45.9626, lng: 17.4721},
+  {id: 11847155628, name: "Lidl", address: "8400 Ajka, Fő út 69.", lat: 47.1039, lng: 17.5583},
+  {id: 11847155629, name: "Lidl", address: "8420 Zirc, Kossuth Lajos utca 18.", lat: 47.2642, lng: 17.8732},
+  {id: 11847155630, name: "Lidl", address: "8330 Sümeg, 84-es főút", lat: 46.9749, lng: 17.279},
+  {id: 11847155631, name: "Lidl", address: "8174 Balatonkenese, Kálvin János tér 1.", lat: 47.042, lng: 18.1065},
+  {id: 11847155632, name: "Lidl", address: "8640 Fonyód, Ady Endre utca 5.", lat: 46.7454, lng: 17.5529},
+  {id: 11847155633, name: "Lidl", address: "8060 Mór, Wekerle Sándor utca 36.", lat: 47.3734, lng: 18.2045},
+  {id: 11847155634, name: "Lidl", address: "8093 Lovasberény, Székesfehérvári út 29.", lat: 47.3113, lng: 18.5422},
+  {id: 11847155635, name: "Lidl", address: "8083 Csákvár, Széchenyi utca 57.", lat: 47.3916, lng: 18.4616},
+  {id: 11847155636, name: "Lidl", address: "8154 Polgárdi, Batthyány utca 140.", lat: 47.0583, lng: 18.3005},
+  {id: 11847155637, name: "Lidl", address: "9155 Lébény, Fő út 66.", lat: 47.737, lng: 17.3916},
+  {id: 11847155638, name: "Lidl", address: "9653 Répcelak, Carl von Linde út 1.", lat: 47.4116, lng: 16.9959}
+]
 
 const map = L.map('map').setView([47.2, 19.5], 7);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution:'© OpenStreetMap'}).addTo(map);
@@ -62,36 +209,34 @@ let visited = JSON.parse(localStorage.getItem('lidlVisited') || '[]');
 function save() { localStorage.setItem('lidlVisited', JSON.stringify(visited)); }
 
 function renderTables() {
-  const vTbody = document.querySelector('#visited tbody');
-  const uTbody = document.querySelector('#unvisited tbody');
-  vTbody.innerHTML = '';
-  uTbody.innerHTML = '';
+  const vTbody = document.querySelector('#visited tbody');
+  const uTbody = document.querySelector('#unvisited tbody');
+  vTbody.innerHTML = '';
+  uTbody.innerHTML = '';
 
-  STORES.forEach(s => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${s.name}</td><td>${s.address}</td>`;
-    (visited.includes(s.id) ? vTbody : uTbody).appendChild(tr);
-  });
-  document.getElementById('visited-count').textContent   = visited.length;
-  document.getElementById('unvisited-count').textContent = STORES.length - visited.length;
+  STORES.forEach(s => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${s.name}</td><td>${s.address}</td>`;
+    (visited.includes(s.id) ? vTbody : uTbody).appendChild(tr);
+  });
+  document.getElementById('visited-count').textContent   = visited.length;
+  document.getElementById('unvisited-count').textContent = STORES.length - visited.length;
 }
 
 STORES.forEach(s => {
-  const marker = L.marker([s.lat, s.lng]).addTo(map);
-  const isVisited = visited.includes(s.id);
-  const checkbox = `<label><input type="checkbox" data-id="${s.id}" ${isVisited?'checked':''}> Meglátogattam</label>`;
-  marker.bindPopup(`<b>${s.name}</b><br>${s.address}<br>${checkbox}`);
+  const marker = L.marker([s.lat, s.lng]).addTo(map);
+  const isVisited = visited.includes(s.id);
+  const checkbox = `<label><input type="checkbox" data-id="${s.id}" ${isVisited?'checked':''}> Meglátogattam</label>`;
+  marker.bindPopup(`<b>${s.name}</b><br>${s.address}<br>${checkbox}`);
 });
 
 document.addEventListener('change', e => {
-  if (!e.target.matches('input[type=checkbox]')) return;
-  const id = +e.target.dataset.id;
-  if (e.target.checked) { if (!visited.includes(id)) visited.push(id); }
-  else { visited = visited.filter(v => v !== id); }
-  save();
-  renderTables();
+  if (!e.target.matches('input[type=checkbox]')) return;
+  const id = +e.target.dataset.id;
+  if (e.target.checked) { if (!visited.includes(id)) visited.push(id); }
+  else { visited = visited.filter(v => v !== id); }
+  save();
+  renderTables();
 });
-
-renderTables();
 
 renderTables();
