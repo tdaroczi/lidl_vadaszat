@@ -14,9 +14,9 @@ import {
   setDoc 
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-// Your web app's Firebase configuration - Most már itt, biztonságban
+// Your web app's Firebase configuration - Most már itt, a script.js-ben van a helye
 const firebaseConfig = {
-  apiKey: "AIzaSyBAibYE5ngSjnujCpMiqwrEXdivJAi4DFM",
+  apiKey: "AIzaSyBAibYE5ngSjnujCpMiqwrEXdivJAi4DFM", // Ez a te kulcsod
   authDomain: "lidl-vadaszat.firebaseapp.com",
   projectId: "lidl-vadaszat",
   storageBucket: "lidl-vadaszat.firebasestorage.app",
@@ -24,15 +24,16 @@ const firebaseConfig = {
   appId: "1:353145173567:web:4108b55fd000aa47aaaa8a"
 };
 
-// Initialize Firebase
+// Firebase inicializálása
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-
 // Az üzletek listája (a te 199 üzletes listád)
 const STORES = [
-    {id: 260896313, name: "Lidl", address: "1051 Budapest, Arany János utca 27-29", lat: 47.5021289, lng: 19.0528886},
+    // Ide jön a teljes, 199 üzletet tartalmazó lista, amit korábban adtam.
+    // A rövidség kedvéért most csak néhány példát hagyok itt.
+     {id: 260896313, name: "Lidl", address: "1051 Budapest, Arany János utca 27-29", lat: 47.5021289, lng: 19.0528886},
     {id: 1796395943, name: "Lidl", address: "1068 Budapest, Király utca 112", lat: 47.5071915, lng: 19.0717499},
     {id: 2010647754, name: "Lidl", address: "2096 Üröm, Dózsa György út 36", lat: 47.5903086, lng: 19.0108341},
     {id: 2363662151, name: "Lidl", address: "1065 Budapest, Bajcsy-Zsilinszky út 61", lat: 47.508896, lng: 19.0553676},
@@ -260,35 +261,22 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution:'
 let visited = [];
 let currentUser = null;
 
-// --- ÚJ RÉSZ: FIREBASE FUNKCIÓK ---
+// --- FIREBASE FUNKCIÓK ---
 
-/**
- * Figyeljük a bejelentkezési állapot változását.
- * Ez a program központi vezérlője. Akkor fut le, ha valaki be- vagy kijelentkezik.
- */
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
   if (user) {
-    // Ha a felhasználó be van jelentkezve:
     authContainer.innerHTML = `Szia, ${user.displayName}! <button id="logout-btn">Kijelentkezés</button>`;
     document.getElementById('logout-btn').addEventListener('click', handleSignOut);
-    
-    // Töltsük be a mentett boltjait az adatbázisból
     loadVisitedStores();
   } else {
-    // Ha a felhasználó ki van jelentkezve:
     authContainer.innerHTML = `<button id="login-btn">Bejelentkezés Google fiókkal</button>`;
     document.getElementById('login-btn').addEventListener('click', handleSignIn);
-    
-    // Töröljük a listákat és nullázzuk a számlálókat
     visited = [];
     renderAll();
   }
 });
 
-/**
- * Bejelentkezés Google fiókkal
- */
 async function handleSignIn() {
   const provider = new GoogleAuthProvider();
   try {
@@ -298,9 +286,6 @@ async function handleSignIn() {
   }
 }
 
-/**
- * Kijelentkezés
- */
 async function handleSignOut() {
   try {
     await signOut(auth);
@@ -309,30 +294,16 @@ async function handleSignOut() {
   }
 }
 
-/**
- * Adatok betöltése a Firestore adatbázisból
- */
 async function loadVisitedStores() {
   if (!currentUser) return;
-  
   const userDocRef = doc(db, "users", currentUser.uid);
   const docSnap = await getDoc(userDocRef);
-
-  if (docSnap.exists()) {
-    visited = docSnap.data().visited || [];
-  } else {
-    visited = [];
-  }
-  
+  visited = docSnap.exists() ? docSnap.data().visited || [] : [];
   renderAll();
 }
 
-/**
- * Mentés a Firestore-ba
- */
 async function saveVisitedStores() {
   if (!currentUser) return;
-  
   const userDocRef = doc(db, "users", currentUser.uid);
   try {
     await setDoc(userDocRef, { visited: visited });
@@ -341,70 +312,54 @@ async function saveVisitedStores() {
   }
 }
 
-// --- MEGLÉVŐ LOGIKA ÁTALAKÍTVA ---
+// --- RENDERELŐ FUNKCIÓK ---
 
-/**
- * Táblázatok renderelése
- */
 function renderTables() {
   visitedTbody.innerHTML = '';
   unvisitedTbody.innerHTML = '';
-
   STORES.forEach(s => {
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${s.name}</td><td>${s.address}</td>`;
     (visited.includes(s.id) ? visitedTbody : unvisitedTbody).appendChild(tr);
   });
-  
   visitedCountSpan.textContent = visited.length;
   unvisitedCountSpan.textContent = STORES.length - visited.length;
 }
 
-/**
- * Markerek renderelése
- */
 function renderMarkers() {
-    map.eachLayer((layer) => {
-        if (layer instanceof L.Marker) {
-            map.removeLayer(layer);
-        }
+    map.eachLayer(layer => {
+        if (layer instanceof L.Marker) map.removeLayer(layer);
     });
-
     STORES.forEach(s => {
-        const marker = L.marker([s.lat, s.lng]).addTo(map);
         const isVisited = visited.includes(s.id);
+        const marker = L.marker([s.lat, s.lng]).addTo(map);
         const checkbox = `<label><input type="checkbox" data-id="${s.id}" ${isVisited ? 'checked' : ''}> Meglátogattam</label>`;
         marker.bindPopup(`<b>${s.name}</b><br>${s.address}<br>${checkbox}`);
     });
 }
 
-/**
- * A teljes felület frissítése
- */
 function renderAll() {
     renderTables();
     renderMarkers();
 }
 
-/**
- * Checkbox eseménykezelője
- */
+// --- ESEMÉNYKEZELŐ ---
+
 document.addEventListener('change', e => {
   if (!e.target.matches('input[type=checkbox]')) return;
-  
   if (!currentUser) {
     alert("A boltok megjelöléséhez kérlek jelentkezz be!");
     e.target.checked = !e.target.checked;
     return;
   }
-  
   const id = +e.target.dataset.id;
   if (e.target.checked) {
     if (!visited.includes(id)) visited.push(id);
   } else {
     visited = visited.filter(v => v !== id);
   }
-  
   renderTables();
   saveVisitedStores();
 });
+
+// A legelső renderelés inaktív, mert a bejelentkezés utáni állapot fogja elindítani a renderAll() függvényt.
