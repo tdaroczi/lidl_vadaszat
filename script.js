@@ -225,7 +225,7 @@ const STORES = [
     {id: 611761440, name: "Lidl", address: "6640 Csongrád, Fő utca 59", lat: 46.7107062, lng: 20.1371518},
     {id: 616600147, name: "Lidl", address: "3900 Szerencs, Csalogány utca 58", lat: 48.1545625, lng: 21.1945532},
     {id: 618285105, name: "Lidl", address: "6800 Hódmezővásárhely, Hódtó utca 2", lat: 46.4103328, lng: 20.3254921},
-    {id: 654317880, name: "Lidl", address: "2112 Veresegyház, Erkel Ferenc tér 4", lat: 47.6588264, lng: 20.2802319},
+    {id: 654317880, name: "Lidl", address: "2112 Veresegyház, Erkel Ferenc tér 4", lat: 47.65859, lng: 19.27033},
     {id: 673183331, name: "Lidl", address: "3104 Salgótarján, Csokonai út 23", lat: 48.076504, lng: 19.7901594},
     {id: 675544912, name: "Lidl", address: "1116 Budapest, Fehérvári út 211", lat: 47.4470381, lng: 19.036573},
     {id: 677268186, name: "Lidl", address: "3300 Eger, Mátyás király út 144", lat: 47.8695191, lng: 20.3809009},
