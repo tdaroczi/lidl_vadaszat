@@ -5,3 +5,28 @@ h1, h2 { color: #0050aa; }
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 0.4rem 0.6rem; border-bottom: 1px solid #ddd; text-align: left; }
 @media (max-width: 768px) { .tables { grid-template-columns: 1fr; } }
+/* EZEKET A SOROKAT ADD A style.css VÉGÉRE */
+
+h1 {
+  text-align: center; /* Címsor középre igazítása */
+}
+
+#auth-container {
+  text-align: center; /* A gombot tartalmazó doboz középre igazítása */
+  margin-bottom: 1rem; /* Egy kis tér a térkép felett */
+}
+
+#login-btn, #logout-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#login-btn:hover, #logout-btn:hover {
+  background-color: #0056b3;
+}
