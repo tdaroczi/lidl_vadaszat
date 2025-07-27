@@ -30,3 +30,7 @@ h1 {
 #login-btn:hover, #logout-btn:hover {
   background-color: #0056b3;
 }
+#login-btn, #logout-btn {
+  /* ... (a meglévő stílusok) ... */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* EZ AZ ÚJ SOR */
+}
