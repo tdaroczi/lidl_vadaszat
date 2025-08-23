@@ -258,6 +258,25 @@ const unvisitedCountSpan = document.getElementById('unvisited-count');
 const map = L.map('map').setView([47.2, 19.5], 7);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution:'© OpenStreetMap'}).addTo(map);
 
+// --- IKONOK DEFINIÁLÁSA ---
+const greenIcon = L.icon({
+    iconUrl: 'marker-icon-2x-green.png',
+    shadowUrl: 'marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const blueIcon = L.icon({
+    iconUrl: 'marker-icon-2x-blue.png',
+    shadowUrl: 'marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
 let visited = [];
 let currentUser = null;
 
@@ -332,7 +351,8 @@ function renderMarkers() {
     });
     STORES.forEach(s => {
         const isVisited = visited.includes(s.id);
-        const marker = L.marker([s.lat, s.lng]).addTo(map);
+        const icon = isVisited ? greenIcon : blueIcon; // Ikon kiválasztása
+        const marker = L.marker([s.lat, s.lng], { icon: icon }).addTo(map); // Ikon beállítása
         const checkbox = `<label><input type="checkbox" data-id="${s.id}" ${isVisited ? 'checked' : ''}> Meglátogattam</label>`;
         marker.bindPopup(`<b>${s.name}</b><br>${s.address}<br>${checkbox}`);
     });
@@ -359,6 +379,7 @@ document.addEventListener('change', e => {
     visited = visited.filter(v => v !== id);
   }
   renderTables();
+  renderMarkers(); // A TÉRKÉP ÚJRA RAJZOLÁSA A SZÍNEK FRISSÍTÉSÉHEZ
   saveVisitedStores();
 });
 
